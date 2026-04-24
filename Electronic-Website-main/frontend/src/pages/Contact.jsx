@@ -72,7 +72,7 @@ const Contact = () => {
           <FaMapMarkerAlt className="text-indigo-600 text-3xl mb-3" />
           <h3 className="font-semibold text-lg mb-1">Address</h3>
           <p className="text-gray-600 text-center">
-            No. 23, Main Street, Valaichenai, Batticaloa, Sri Lanka
+            No. 96/1, Al Ameen Road, Kattankudy, Batticaloa, Sri Lanka
           </p>
         </div>
       </motion.div>
