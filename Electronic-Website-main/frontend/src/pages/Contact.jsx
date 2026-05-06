@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion as Motion } from "framer-motion";
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -8,83 +8,85 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 import { assets } from "../assets/assets";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
 
 const Contact = () => {
   const [image, setImage] = useState("");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 flex flex-col items-center justify-center p-8">
+    <div className="min-h-screen bg-base px-section-x py-section">
       {/* Header */}
-      <motion.h1
+      <Motion.h1
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-4xl md:text-5xl font-extrabold text-center text-indigo-700 mb-8"
+        className="text-center text-3xl font-semibold text-foreground md:text-4xl"
       >
-        Contact <span className="text-purple-600">GetItWare</span>
-      </motion.h1>
+        Contact <span className="text-accent">GetItWare</span>
+      </Motion.h1>
 
       {/* Logo Section */}
-      <motion.div
+      <Motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.6 }}
-        className="flex flex-col items-center mb-10"
+        className="mt-6 flex flex-col items-center"
       >
         {image && (
           <img
             src={image}
             alt="Selected"
-            className="w-32 h-32 mb-4 object-contain rounded-full shadow-lg"
+            className="mb-4 h-24 w-24 rounded-full border border-border bg-surface object-contain shadow-soft"
           />
         )}
-        <button
+        <Button
           onClick={() => setImage(assets.logo || "/assets/logo.png")}
-          className="bg-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:bg-indigo-700 transition-transform hover:scale-105"
+          size="sm"
         >
-          Show Logo
-        </button>
-      </motion.div>
+          Show logo
+        </Button>
+      </Motion.div>
 
       {/* Contact Info */}
-      <motion.div
+      <Motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.8 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full mb-12"
+        className="mt-10 grid gap-6 md:grid-cols-3"
       >
         {/* Phone */}
-        <div className="flex flex-col items-center bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition">
-          <FaPhoneAlt className="text-indigo-600 text-3xl mb-3" />
-          <h3 className="font-semibold text-lg mb-1">Phone</h3>
-          <p className="text-gray-600">+94 75 3411591</p>
-        </div>
+        <Card className="flex flex-col items-center gap-2 p-6 text-center">
+          <FaPhoneAlt className="mb-3 text-2xl text-accent" />
+          <h3 className="text-sm font-semibold text-foreground">Phone</h3>
+          <p className="text-xs text-subtle">+94 75 3411591</p>
+        </Card>
 
         {/* Email */}
-        <div className="flex flex-col items-center bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition">
-          <FaEnvelope className="text-indigo-600 text-3xl mb-3" />
-          <h3 className="font-semibold text-lg mb-1">Email</h3>
-          <p className="text-gray-600">supportGetitWare@gmail.com</p>
-        </div>
+        <Card className="flex flex-col items-center gap-2 p-6 text-center">
+          <FaEnvelope className="mb-3 text-2xl text-accent" />
+          <h3 className="text-sm font-semibold text-foreground">Email</h3>
+          <p className="text-xs text-subtle">supportGetitWare@gmail.com</p>
+        </Card>
 
         {/* Address */}
-        <div className="flex flex-col items-center bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition">
-          <FaMapMarkerAlt className="text-indigo-600 text-3xl mb-3" />
-          <h3 className="font-semibold text-lg mb-1">Address</h3>
-          <p className="text-gray-600 text-center">
+        <Card className="flex flex-col items-center gap-2 p-6 text-center">
+          <FaMapMarkerAlt className="mb-3 text-2xl text-accent" />
+          <h3 className="text-sm font-semibold text-foreground">Address</h3>
+          <p className="text-xs text-subtle">
             No. 96/1, Al Ameen Road, Kattankudy, Batticaloa, Sri Lanka
           </p>
-        </div>
-      </motion.div>
+        </Card>
+      </Motion.div>
 
       {/* Contact Form */}
-      <motion.form
+      <Motion.form
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.8 }}
-        className="bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl p-8 max-w-3xl w-full"
+        className="glass-panel mt-10 w-full max-w-3xl rounded-3xl p-8"
       >
-        <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center">
+        <h2 className="text-center text-xl font-semibold text-foreground">
           Send Us a Message
         </h2>
 
@@ -92,43 +94,40 @@ const Contact = () => {
           <input
             type="text"
             placeholder="Your Name"
-            className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
           />
           <input
             type="email"
             placeholder="Your Email"
-            className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
           />
         </div>
 
         <textarea
           rows="5"
           placeholder="Your Message..."
-          className="border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full mt-6"
+          className="mt-6 w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
         ></textarea>
 
         <div className="flex justify-center mt-6">
-          <button
-            type="submit"
-            className="bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-indigo-700 transform hover:scale-105 transition duration-300 shadow-md"
-          >
-            Send Message
-          </button>
+          <Button type="submit" size="lg">
+            Send message
+          </Button>
         </div>
-      </motion.form>
+      </Motion.form>
 
       {/* Social Links */}
-      <motion.div
+      <Motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.8 }}
-        className="flex space-x-6 mt-10"
+        className="mt-10 flex space-x-6"
       >
         <a
           href="https://facebook.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transform hover:scale-110 transition duration-300"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-soft transition hover:-translate-y-0.5"
         >
           <FaFacebookF size={20} />
         </a>
@@ -136,14 +135,14 @@ const Contact = () => {
           href="https://instagram.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 text-white shadow-lg hover:opacity-90 transform hover:scale-110 transition duration-300"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-soft transition hover:-translate-y-0.5"
         >
           <FaInstagram size={22} />
         </a>
-      </motion.div>
+      </Motion.div>
 
       {/* Footer */}
-      <p className="text-gray-500 text-sm mt-8">
+      <p className="mt-8 text-xs uppercase tracking-[0.3em] text-subtle">
         © {new Date().getFullYear()} GetItWare — All Rights Reserved.
       </p>
     </div>

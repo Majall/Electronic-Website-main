@@ -1,43 +1,44 @@
-import React from 'react'
-import { assets } from '../assets/assets'
+import { assets } from "../assets/assets";
+import Card from "./ui/Card";
 
 const OurPolicy = () => {
   return (
-    <div className="flex flex-col sm:flex-row justify-around gap-12 sm:gap-2 text-center py-16 text-xs sm:text-sm md:text-base text-gray-700 animate-fade-in-up">
-      {/* Card 1 */}
-      <div className="transition-transform duration-500 hover:scale-110 hover:-translate-y-2 animate-fade-in-left">
-        <img
-          src={assets.exchange_icon}
-          className="w-12 m-auto mb-5 animate-bounce"
-          alt="exchange"
-        />
-        <p className="font-semibold">Easy Exchange Policy</p>
-        <p className="text-gray-600">We offer</p>
-      </div>
-
-      {/* Card 2 */}
-      <div className="transition-transform duration-500 hover:scale-110 hover:-translate-y-2 animate-fade-in-left">
-        <img
-          src={assets.quality_icon}
-          className="w-12 m-auto mb-5 animate-bounce"
-          alt="quality"
-        />
-        <p className="font-semibold">Seven Day Return Policy</p>
-        <p className="text-gray-600">We provide 7 day free return</p>
-      </div>
-
-      {/* Card 3 */}
-      <div className="transition-transform duration-500 hover:scale-110 hover:-translate-y-2 animate-fade-in-right">
-        <img
-          src={assets.support_img}
-          className="w-12 m-auto mb-5 animate-bounce"
-          alt="support"
-        />
-        <p className="font-semibold">Best Customer Support</p>
-        <p className="text-gray-600">We provide 24/7 support</p>
-      </div>
+    <div className="grid gap-6 text-center text-sm text-subtle sm:grid-cols-3">
+      {[
+        {
+          title: "Easy exchange policy",
+          desc: "Flexible returns with effortless exchanges.",
+          icon: assets.exchange_icon,
+        },
+        {
+          title: "Seven day return",
+          desc: "Shop confidently with quick returns.",
+          icon: assets.quality_icon,
+        },
+        {
+          title: "Premium support",
+          desc: "24/7 assistance that feels human.",
+          icon: assets.support_img,
+        },
+      ].map((policy) => (
+        <Card
+          key={policy.title}
+          className="flex flex-col items-center gap-3 p-6 transition-transform duration-300 hover:-translate-y-1"
+        >
+          <img
+            src={policy.icon}
+            className="h-12 w-12"
+            alt={policy.title}
+            loading="lazy"
+          />
+          <p className="text-sm font-semibold text-foreground">
+            {policy.title}
+          </p>
+          <p className="text-xs text-subtle">{policy.desc}</p>
+        </Card>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default OurPolicy
+export default OurPolicy;

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ShopContext } from "../context/ShopContext";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { ShopContext } from "../context/ShopContextContext";
 import Title from "../components/Title";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -9,7 +9,7 @@ const Orders = () => {
   const [orderData, setOrderData] = useState([]);
   const [reviewBox, setReviewBox] = useState({}); // track which item shows review box
 
-  const orders = async () => {
+  const orders = useCallback(async () => {
     try {
       if (!token) return null;
 
@@ -33,11 +33,11 @@ const Orders = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [backendUrl, token]);
 
   useEffect(() => {
     orders();
-  }, [token]);
+  }, [orders]);
 
   const toggleReviewBox = (index) => {
     setReviewBox((prev) => ({
@@ -79,7 +79,7 @@ const Orders = () => {
   };
 
   return (
-    <div className="border-t pt-16">
+    <div className="border-t border-border pt-10">
       <div className="text-2xl">
         <Title text1={"MY"} text2={"ORDERS"} />
       </div>
@@ -87,13 +87,20 @@ const Orders = () => {
         {orderData.map((item, index) => (
           <div
             key={index}
-            className="py-4 border-t border-b text-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+            className="flex flex-col gap-4 border-b border-border py-6 md:flex-row md:items-center md:justify-between"
           >
             <div className="flex items-start gap-6 text-sm">
-              <img className="w-16 sm:w-20" src={item.image[0]} alt="" />
+              <img
+                className="w-16 rounded-md bg-muted object-contain sm:w-20"
+                src={item.image[0]}
+                alt={item.name}
+                loading="lazy"
+              />
               <div>
-                <p className="sm:text-base font-medium">{item.name}</p>
-                <div className="flex items-center gap-3 mt-2 text-base text-gray-700">
+                <p className="text-sm font-semibold text-foreground sm:text-base">
+                  {item.name}
+                </p>
+                <div className="mt-2 flex items-center gap-3 text-xs text-subtle">
                   <p className="text-lg">
                     {currency}
                     {item.price}
@@ -103,27 +110,29 @@ const Orders = () => {
                 </div>
                 <p className="mt-2">
                   Date:{" "}
-                  <span className="text-gray-400">
+                  <span className="text-subtle">
                     {new Date(item.date).toDateString()}
                   </span>
                 </p>
                 <p className="mt-2">
                   Payment:{" "}
-                  <span className="text-gray-400">{item.paymentMethod}</span>
+                  <span className="text-subtle">{item.paymentMethod}</span>
                 </p>
               </div>
             </div>
 
             <div className="md:w-1/2 flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
-                <p className="text-sm md:text-base">{item.status}</p>
+                <p className="min-w-2 h-2 rounded-full bg-success"></p>
+                <p className="text-sm text-foreground md:text-base">
+                  {item.status}
+                </p>
               </div>
 
               {item.status !== "Delivered" && (
                 <button
                   onClick={orders}
-                  className="border px-4 py-2 text-sm font-medium rounded-sm"
+                  className="rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-muted"
                 >
                   Track Order
                 </button>
@@ -133,7 +142,7 @@ const Orders = () => {
               {item.status === "Delivered" && !reviewBox[index] && (
                 <button
                   onClick={() => toggleReviewBox(index)}
-                  className="border px-4 py-2 text-sm font-medium rounded-sm mt-2"
+                  className="mt-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-muted"
                 >
                   Write a Review
                 </button>
@@ -144,7 +153,7 @@ const Orders = () => {
                 <div className="flex flex-col gap-2 mt-2 w-full">
                   <textarea
                     placeholder="Write your review..."
-                    className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-md border border-border bg-surface p-2 text-xs text-foreground focus-ring"
                     value={item.review || ""}
                     onChange={(e) => {
                       const updatedOrders = [...orderData];
@@ -155,13 +164,13 @@ const Orders = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => submitReview(index, item)}
-                      className="bg-blue-600 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-700 transition"
+                      className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90"
                     >
                       Submit Review
                     </button>
                     <button
                       onClick={() => toggleReviewBox(index)}
-                      className="bg-gray-300 text-gray-700 px-4 py-2 text-sm rounded-md hover:bg-gray-400 transition"
+                      className="rounded-full border border-border bg-muted px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-surface"
                     >
                       Cancel
                     </button>

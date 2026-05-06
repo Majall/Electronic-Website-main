@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
-import Title from "../components/Title";
-import { ShopContext } from "../context/ShopContext";
+import Button from "../components/ui/Button";
 import CartTotal from "../components/CartTotal";
+import Title from "../components/Title";
+import { ShopContext } from "../context/ShopContextContext";
 
 const Cart = () => {
   const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
@@ -29,8 +30,8 @@ const Cart = () => {
   }, [cartItems, products]);
 
   return (
-    <div className="border-t pt-14">
-      <div className="text-2xl mb-3">
+    <div className="border-t border-border pt-10">
+      <div className="mb-6 text-2xl">
         <Title text1={"Your"} text2={"Cart"} />
       </div>
       <div>
@@ -42,24 +43,25 @@ const Cart = () => {
           return (
             <div
               key={index}
-              className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] items-center gap-4"
+              className="grid grid-cols-[4fr_0.5fr_0.5fr] items-center gap-4 border-b border-border py-4 text-sm text-subtle"
             >
               <div className="flex items-start gap-6">
                 <img
-                  className="w-16 sm:w-20"
+                  className="w-16 rounded-md bg-muted object-contain sm:w-20"
                   src={productData.image[0]}
-                  alt=""
+                  alt={productData.name}
+                  loading="lazy"
                 />
                 <div>
-                  <p className="text-xs sm:text-lg font-medium ">
+                  <p className="text-xs font-semibold text-foreground sm:text-base">
                     {productData.name}
                   </p>
-                  <div className="flex items-center gap-5 mt-2">
+                  <div className="mt-2 flex items-center gap-5 text-xs text-subtle">
                     <p>
                       {currency}
                       {productData.price}
                     </p>
-                    <p className="px-2 sm:px-3 sm:py-1 border bg-slate-50">
+                    <p className="rounded-full border border-border bg-surface px-3 py-1 text-[10px]">
                       {item.size}
                     </p>
                   </div>
@@ -75,7 +77,7 @@ const Cart = () => {
                         Number(e.target.value)
                       )
                 }
-                className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
+                className="max-w-14 rounded-md border border-border bg-surface px-2 py-1 text-xs text-foreground focus-ring"
                 type="number"
                 min={1}
                 defaultValue={item.quantity}
@@ -83,8 +85,8 @@ const Cart = () => {
               <img
                 onClick={() => updateQuantity(item._id, item.size, 0)}
                 src={assets.bin_icon}
-                className="w-4 cursor-pointer mr-4 sm:w-5"
-                alt=""
+                className="mr-4 w-4 cursor-pointer sm:w-5"
+                alt="Remove item"
               />
             </div>
           );
@@ -94,12 +96,13 @@ const Cart = () => {
         <div className="w-full sm:w-[450px]">
           <CartTotal />
           <div className="w-full text-end">
-            <button
+            <Button
               onClick={() => navigate("/PlaceOrder")}
-              className="bg-black text-white text-sm my-8 py-3 px-2"
+              size="lg"
+              className="my-8 w-full sm:w-auto"
             >
-              PROCEED TO CHECKOUT
-            </button>
+              Proceed to checkout
+            </Button>
           </div>
         </div>
       </div>
