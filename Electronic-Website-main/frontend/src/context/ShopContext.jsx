@@ -1,9 +1,8 @@
-import { createContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-export const ShopContext = createContext(); // shared state container that allows you to Access and use any shared data or functions
+import { ShopContext } from "./ShopContextContext";
 
 const ShopContextProvider = (props) => {
   //the component that stores and provides that data
@@ -15,6 +14,7 @@ const ShopContextProvider = (props) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [token, setToken] = useState("");
@@ -62,12 +62,9 @@ const ShopContextProvider = (props) => {
     for (const items in cartItems) {
       for (const size in cartItems[items]) {
         //cartItems["product123"] = { "M": 2, "L": 1 }
-        try {
-          if (cartItems[items][size] > 0) {
-            //cartItems[items][size] = cartItems["product123"]["M"] = 2
-            totalCount += cartItems[items][size];
-          }
-        } catch (error) {}
+        if (cartItems[items][size] > 0) {
+          totalCount += cartItems[items][size];
+        }
       }
     }
     return totalCount;
@@ -98,17 +95,16 @@ const ShopContextProvider = (props) => {
     for (const items in cartItems) {
       let itemInfo = products.find((product) => product._id === items);
       for (const size in cartItems[items]) {
-        try {
-          if (cartItems[items][size] > 0) {
-            totalAmount += itemInfo.price * cartItems[items][size];
-          }
-        } catch (error) {}
+        if (cartItems[items][size] > 0 && itemInfo) {
+          totalAmount += itemInfo.price * cartItems[items][size];
+        }
       }
     }
     return totalAmount;
   };
 
-  const getProducts = async () => {
+  const getProducts = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(backendUrl + "/api/product/list");
 
@@ -136,10 +132,12 @@ const ShopContextProvider = (props) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [backendUrl]);
 
-  const getCategories = async () => {
+  const getCategories = useCallback(async () => {
     try {
       const res = await axios.get(backendUrl + "/api/category/list");
       if (res.data.success) {
@@ -149,8 +147,8 @@ const ShopContextProvider = (props) => {
       console.log(error);
       toast.error(error.message);
     }
-  };
-  const getBrands = async () => {
+  }, [backendUrl]);
+  const getBrands = useCallback(async () => {
     try {
       const res = await axios.get(backendUrl + "/api/brand/list");
       if (res.data.success) {
@@ -160,21 +158,25 @@ const ShopContextProvider = (props) => {
       console.log(error);
       toast.error(error.message);
     }
-  };
+  }, [backendUrl]);
 
-  const getUserCart = async (token) => {
-    try {
-      const response = await axios.get(backendUrl + "/api/cart/get", {
-        headers: { token },
-      });
-      if (response.data.success) {
-        setCartItems(response.data.cartData);
+  const getUserCart = useCallback(
+    async (userToken) => {
+      try {
+        const response = await axios.get(backendUrl + "/api/cart/get", {
+          headers: { token: userToken },
+        });
+        if (response.data.success) {
+          setCartItems(response.data.cartData);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error(error.message);
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
-  };
+    },
+    [backendUrl]
+  );
+
   useEffect(() => {
     if (token) {
       axios
@@ -184,21 +186,25 @@ const ShopContextProvider = (props) => {
         })
         .catch((err) => console.log(err));
     }
-  }, [token]);
+  }, [backendUrl, token]);
 
   useEffect(() => {
-    getProducts(), getCategories(), getBrands();
-  }, []);
+    getProducts();
+    getCategories();
+    getBrands();
+  }, [getBrands, getCategories, getProducts]);
 
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
-      setToken(localStorage.getItem("token"));
-      getUserCart(localStorage.getItem("token"));
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+      getUserCart(storedToken);
     }
-  }, []);
+  }, [getUserCart, token]);
 
   const value = {
     products,
+    isLoading,
     currency,
     delivery_fee,
     categories,

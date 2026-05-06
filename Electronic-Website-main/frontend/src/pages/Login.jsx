@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { ShopContext } from '../context/ShopContext';
-import { toast } from 'react-hot-toast';
-import axios from 'axios';
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
+import { ShopContext } from "../context/ShopContextContext";
 
 const Login = () => {
 
@@ -37,33 +39,70 @@ const Login = () => {
       toast.error(error.message)
     }
   }
-  useEffect(()=>{
-    if(token){
-      navigate('/home')
+  useEffect(() => {
+    if (token) {
+      navigate("/home");
     }
-  },[token])
+  }, [navigate, token]);
 
   return (
-    <form onSubmit={onSubmitHandler} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
-      <div className='inline-flex items-center gap-2 mb-2 mt-10'>
-        <p className='text-3xl'>{currentState}</p>
-        <hr className='border-none h-[1.5px] w-8 bg-gray-800' />
-      </div>
-      {currentState === 'Login' ? "":<input type="text" onChange={(e)=>setName(e.target.value)} className='w-full px-3 py-2 border border-gray-800' placeholder='Name'  required/>}
-      <input type="email" onChange={(e)=>setEmail(e.target.value)} className='w-full px-3 py-2 border border-gray-800' placeholder='Email'required />
-      <input type="password" onChange={(e)=>setPassword(e.target.value)} className='w-full px-3 py-2 border border-gray-800' placeholder='Password'required />
-      <div className='w-full flex justify-between text-sm mt-[-8px]'>
-        <p>Forgot your password</p>
-        {currentState === 'Login'? (
-          <p onClick={()=>setCurrentState('Sign Up')} className='cursor-pointer'>Create account</p> 
-        ):(
-        <p onClick={()=>setCurrentState('Login')} className='cursor-pointer'>Login here</p>)}
-      </div>
-      <button className='bg-black text-white font-light px-8 py-2 mt-4 w-full rounded-md'>{currentState==='Login' ? 'SignIn' : 'SignUp'}</button>
-
-
-    </form>
-  )
+    <div className="flex min-h-[70vh] items-center justify-center">
+      <Card className="w-full max-w-md p-8">
+        <form onSubmit={onSubmitHandler} className="space-y-4 text-foreground">
+          <div className="flex items-center gap-3">
+            <p className="text-2xl font-semibold">{currentState}</p>
+            <span className="h-px w-10 bg-border" />
+          </div>
+          {currentState === "Login" ? null : (
+            <input
+              type="text"
+              onChange={(e) => setName(e.target.value)}
+              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus-ring"
+              placeholder="Name"
+              required
+            />
+          )}
+          <input
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus-ring"
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus-ring"
+            placeholder="Password"
+            required
+          />
+          <div className="flex items-center justify-between text-xs text-subtle">
+            <p>Forgot your password</p>
+            {currentState === "Login" ? (
+              <button
+                type="button"
+                onClick={() => setCurrentState("Sign Up")}
+                className="font-semibold text-foreground"
+              >
+                Create account
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setCurrentState("Login")}
+                className="font-semibold text-foreground"
+              >
+                Login here
+              </button>
+            )}
+          </div>
+          <Button size="lg" className="w-full" type="submit">
+            {currentState === "Login" ? "Sign in" : "Sign up"}
+          </Button>
+        </form>
+      </Card>
+    </div>
+  );
 }
 
-export default Login
+export default Login;

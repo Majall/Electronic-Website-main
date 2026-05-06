@@ -1,8 +1,9 @@
-import React, { useContext,useEffect } from "react";
-import Title from "../components/Title";
+import { useContext, useEffect, useState } from "react";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
 import CartTotal from "./../components/CartTotal";
-import { ShopContext } from "../context/ShopContext";
-import { useState } from "react";
+import Title from "../components/Title";
+import { ShopContext } from "../context/ShopContextContext";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
@@ -90,11 +91,11 @@ const PlaceOrder = () => {
   return (
     <form
       onSubmit={onSubmitHandler}
-      className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min:h-[80vh] border-top"
+      className="flex flex-col gap-10 border-t border-border pt-10 lg:flex-row lg:justify-between"
     >
       {/* left site */}
-      <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">
-        <div className="text-xl sm:text-2xl my-3">
+      <div className="flex w-full flex-col gap-4 lg:max-w-[480px]">
+        <div className="text-xl">
           <Title text1={"DELIVERY"} text2={"INFORMATION"} />
         </div>
         <div className="flex gap-3">
@@ -105,7 +106,7 @@ const PlaceOrder = () => {
             name="firstName"
             placeholder="First Name"
             value={formData.firstName}
-            className="border border-gray-300 rounded py-1.5 px-3 w-full"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
           />
           <input
             required
@@ -114,7 +115,7 @@ const PlaceOrder = () => {
             name="lastName"
             placeholder="Last Name"
             value={formData.lastName}
-            className="border border-gray-300 rounded py-1.5 px-3 w-full"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
           />
         </div>
         <input
@@ -124,7 +125,7 @@ const PlaceOrder = () => {
           name="email"
           placeholder="Email"
           value={formData.email}
-          className="border border-gray-300 rounded py-1.5 px-3 w-full"
+          className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
         />
         <input
           required
@@ -133,7 +134,7 @@ const PlaceOrder = () => {
           name="street"
           placeholder="Street"
           value={formData.street}
-          className="border border-gray-300 rounded py-1.5 px-3 w-full"
+          className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
         />
         <div className="flex gap-3">
           <input
@@ -143,7 +144,7 @@ const PlaceOrder = () => {
             name="province"
             placeholder="Province"
             value={formData.province}
-            className="border border-gray-300 rounded py-1.5 px-3 w-full"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
           />
           <input
             required
@@ -152,7 +153,7 @@ const PlaceOrder = () => {
             name="district"
             placeholder="District"
             value={formData.district}
-            className="border border-gray-300 rounded py-1.5 px-3 w-full"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
           />
         </div>
         <div className="flex gap-3">
@@ -163,7 +164,7 @@ const PlaceOrder = () => {
             name="zipcode"
             placeholder="ZipCode"
             value={formData.zipcode}
-            className="border border-gray-300 rounded py-1.5 px-3 w-full"
+            className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
           />
           {/* <input required type='text' placeholder='Country' className='border border-gray-300 rounded py-1.5 px-3 w-full'/> */}
         </div>
@@ -174,30 +175,27 @@ const PlaceOrder = () => {
           name="phone"
           placeholder="PhoneNumber"
           value={formData.phone}
-          className="border border-gray-300 rounded py-1.5 px-3 w-full"
+          className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground focus-ring"
         />
       </div>
 
       {/* right site */}
-      <div className="mt-8">
-        <div className="mt-8 min-w-80">
+      <div className="mt-4 w-full lg:mt-0 lg:max-w-sm">
+        <div className="min-w-0">
           <CartTotal />
         </div>
-        <div className="mt-12">
+        <div className="mt-10">
           <Title text1={"PAYMENT"} text2={"METHOD"} />
-          <div className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
-            <p className="text-gray-800 text-sm font-bold mx-4">
-              CASH ON DELIVERY
+          <Card className="mt-4 flex items-center gap-3 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-foreground">
+              Cash on delivery
             </p>
-          </div>
+          </Card>
         </div>
-        <div className="w-full text-end mt-8">
-          <button
-            type="submit"
-            className="bg-black text-white px-16 py-3 text-sm"
-          >
-            PLACE ORDER
-          </button>
+        <div className="mt-8 w-full text-end">
+          <Button type="submit" size="lg">
+            Place order
+          </Button>
         </div>
       </div>
     </form>

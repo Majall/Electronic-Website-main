@@ -1,6 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { ShopContext } from "../context/ShopContext";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
+import { ShopContext } from "../context/ShopContextContext";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -18,56 +20,53 @@ const Profile = () => {
       }
     };
     fetchProfile();
-  }, []);
+  }, [backendUrl, token]);
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-gray-600 text-lg">
+      <div className="flex min-h-[60vh] items-center justify-center text-sm text-subtle">
         Loading profile...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
-      <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-8 text-center transform hover:scale-[1.02] transition duration-300">
-        {/* Profile Image */}
-        <div className="flex justify-center mb-4">
+    <div className="flex min-h-[70vh] items-center justify-center">
+      <Card className="w-full max-w-md p-8 text-center">
+        <div className="flex justify-center">
           <img
             src={
               user.profilePic ||
               "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             }
             alt="Profile"
-            className="w-28 h-28 rounded-full border-4 border-blue-500 shadow-lg"
+            className="h-24 w-24 rounded-full border border-border bg-muted object-cover shadow-soft"
           />
         </div>
 
-        {/* User Info */}
-        <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
-        <p className="text-gray-500 text-sm mb-4">{user.email}</p>
+        <h2 className="mt-4 text-2xl font-semibold text-foreground">
+          {user.name}
+        </h2>
+        <p className="text-xs text-subtle">{user.email}</p>
 
-        <div className="bg-blue-50 rounded-lg p-4 mb-4 text-left text-gray-700">
+        <div className="mt-6 rounded-lg border border-border bg-muted/60 p-4 text-left text-xs text-subtle">
           <p className="mb-2">
-            <span className="font-semibold text-gray-900">Joined:</span>{" "}
+            <span className="font-semibold text-foreground">Joined:</span>{" "}
             {new Date(user.createdAt).toLocaleDateString()}
           </p>
           <p>
-            <span className="font-semibold text-gray-900">Phone:</span>{" "}
+            <span className="font-semibold text-foreground">Phone:</span>{" "}
             {user.phone || "Not added"}
           </p>
         </div>
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button className="w-full sm:w-auto bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
-            Edit Profile
-          </button>
-          <button className="w-full sm:w-auto bg-gray-200 text-gray-800 px-6 py-2 rounded-full hover:bg-gray-300 transition">
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Button size="sm">Edit profile</Button>
+          <Button size="sm" variant="secondary">
             Logout
-          </button>
+          </Button>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

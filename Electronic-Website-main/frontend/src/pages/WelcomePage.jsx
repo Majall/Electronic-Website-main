@@ -1,48 +1,48 @@
+import { motion as Motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import Footer from "../components/Footer";
 import OurPolicy from "../components/OurPolicy";
-import { motion } from "framer-motion";
+import Button from "../components/ui/Button";
 
 const WelcomePage = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 overflow-hidden">
+    <div className="flex min-h-screen flex-col bg-base">
       {/* 🔹 Top Welcome Banner */}
-      <motion.div
+      <Motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-center py-3 text-sm md:text-base font-medium shadow-md"
+        className="w-full bg-primary py-3 text-center text-xs font-semibold uppercase tracking-[0.3em] text-primary-foreground"
       >
-        🎉 Welcome to <span className="font-semibold">GetItWare</span> — Your
-        Trusted Destination for the Latest Electronics!
-      </motion.div>
+        Welcome to GetItWare — your trusted destination for premium electronics.
+      </Motion.div>
 
       {/* Hero Section */}
-      <section className="flex flex-col-reverse md:flex-row items-center justify-between px-8 md:px-20 py-10 md:py-16 relative -mt-4">
+      <section className="mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-10 px-section-x py-section md:flex-row">
         {/* Left Content */}
-        <motion.div
-          className="w-full md:w-1/2 text-center md:text-left space-y-6"
-          initial={{ x: -60, opacity: 0 }}
+        <Motion.div
+          className="w-full space-y-6 text-center md:w-1/2 md:text-left"
+          initial={{ x: -30, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight">
+          <h1 className="text-4xl font-semibold leading-tight text-foreground md:text-5xl">
             Discover{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+            <span className="text-accent">
               Smarter Shopping
             </span>{" "}
-            with GetItWare
+            with GetItWare.
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-600 max-w-md mx-auto md:mx-0">
+          <p className="max-w-md text-sm text-subtle md:mx-0 md:text-base">
             Your one-stop store for premium electronics — laptops, mobiles, and
             gadgets designed to make your life easier.
           </p>
 
-          <motion.div
-            className="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mt-6"
+          <Motion.div
+            className="flex flex-col justify-center gap-3 sm:flex-row md:justify-start"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
@@ -50,87 +50,85 @@ const WelcomePage = () => {
           >
             <Link
               to="/home"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transform hover:-translate-y-1 transition duration-300"
             >
-              Explore Products
+              <Button size="lg">Explore products</Button>
             </Link>
-
-            <Link
-              to="/login"
-              className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transform hover:-translate-y-1 transition duration-300"
-            >
-              Sign Up
+            <Link to="/login">
+              <Button size="lg" variant="secondary">
+                Sign up
+              </Button>
             </Link>
-          </motion.div>
+          </Motion.div>
 
-          <motion.div
-            className="flex justify-center md:justify-start gap-6 mt-8 text-gray-700"
+          <Motion.div
+            className="flex flex-wrap justify-center gap-6 text-xs text-subtle md:justify-start"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.9, delay: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="flex items-center gap-2 hover:text-blue-600 transition">
-              <span className="text-lg">🚚</span>
-              <p>Free Shipping</p>
+            <div className="flex items-center gap-2">
+              <span>🚚</span>
+              <p>Free shipping</p>
             </div>
-            <div className="flex items-center gap-2 hover:text-blue-600 transition">
-              <span className="text-lg">💬</span>
-              <p>24/7 Support</p>
+            <div className="flex items-center gap-2">
+              <span>💬</span>
+              <p>24/7 support</p>
             </div>
-            <div className="flex items-center gap-2 hover:text-blue-600 transition">
-              <span className="text-lg">🔒</span>
-              <p>Secure Payment</p>
+            <div className="flex items-center gap-2">
+              <span>🔒</span>
+              <p>Secure payment</p>
             </div>
-          </motion.div>
-        </motion.div>
+          </Motion.div>
+        </Motion.div>
 
         {/* Right Image */}
-        <motion.div
-          className="w-full md:w-1/2 relative flex justify-center mb-10 md:mb-0"
-          initial={{ x: 60, opacity: 0 }}
+        <Motion.div
+          className="relative flex w-full justify-center md:w-1/2"
+          initial={{ x: 30, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-blue-600/10 to-indigo-700/10 rounded-3xl blur-3xl"></div>
-          <motion.img
+          <div className="absolute inset-0 rounded-3xl bg-accent/10 blur-3xl" />
+          <Motion.img
             src={assets.side}
             alt="Electronics"
-            className="w-full max-w-lg object-contain z-10 rounded-3xl shadow-2xl"
-            whileHover={{ scale: 1.05, rotate: 1 }}
-            transition={{ type: "spring", stiffness: 120 }}
+            className="relative z-10 w-full max-w-lg rounded-3xl object-contain shadow-strong"
+            whileHover={{ scale: 1.03 }}
+            transition={{ duration: 0.6 }}
+            loading="lazy"
           />
-        </motion.div>
+        </Motion.div>
       </section>
 
       {/* Features / Policy Section */}
-      <motion.section
-        className="bg-white py-16 shadow-inner"
-        initial={{ opacity: 0, y: 80 }}
+      <Motion.section
+        className="border-t border-border bg-base py-section"
+        initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
         viewport={{ once: true }}
       >
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">
-            Why Shop with <span className="text-blue-600">GetItWare?</span>
+        <div className="mx-auto max-w-6xl px-section-x text-center">
+          <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">
+            Why shop with <span className="text-accent">GetItWare?</span>
           </h2>
-          <OurPolicy />
+          <div className="mt-8">
+            <OurPolicy />
+          </div>
         </div>
-      </motion.section>
+      </Motion.section>
 
       {/* Footer */}
-      <motion.footer
-        className="mt-auto bg-transparent text-gray-700 py-10 border-t border-gray-200"
+      <Motion.footer
+        className="mt-auto"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <div className="max-w-6xl mx-auto px-8">
-          <Footer />
-        </div>
-      </motion.footer>
+        <Footer />
+      </Motion.footer>
     </div>
   );
 };

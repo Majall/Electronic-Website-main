@@ -1,147 +1,172 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import { assets } from '../assets/assets';
-import Title from '../components/Title'
-import ProductItems from '../components/ProductItems';
+import { useContext, useEffect, useState } from "react";
+import { assets } from "../assets/assets";
+import ProductCardSkeleton from "../components/ProductCardSkeleton";
+import ProductItems from "../components/ProductItems";
+import Title from "../components/Title";
+import Card from "../components/ui/Card";
+import Section from "../components/ui/Section";
+import { ShopContext } from "../context/ShopContextContext";
 
 
 const Collection = () => {
-  const {products,search,showSearch,categories,brands}=useContext(ShopContext);
-  const [showFilter,setShowFilter]=useState(false);
-  const[filterProducts,setFilterProducts]= useState([]);
-  const[category,setCategory] =useState([]);
-  const[brand,setBrand] =useState([]);
-  const[sortType,setSortType] =useState('relevant')
+  const { products, search, showSearch, categories, brands, isLoading } =
+    useContext(ShopContext);
+  const [showFilter, setShowFilter] = useState(false);
+  const [filterProducts, setFilterProducts] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [brand, setBrand] = useState([]);
+  const [sortType, setSortType] = useState("relevant");
 
-  const toggleCategory =(e)=>{
-    if(category.includes(e.target.value)){
-      setCategory(prev => prev.filter(item => item !== e.target.value))
-    }else{
-      setCategory(prev =>[...prev,e.target.value])
+  const toggleCategory = (e) => {
+    if (category.includes(e.target.value)) {
+      setCategory((prev) => prev.filter((item) => item !== e.target.value));
+    } else {
+      setCategory((prev) => [...prev, e.target.value]);
     }
+  };
 
-  }
-
- 
-
-  const toggleBrand=(e)=>{
-    if(brand.includes(e.target.value)){
-      setBrand(prev => prev.filter(item => item !== e.target.value)) // remove if it is already checked
-    }else{
-      setBrand(prev =>[...prev,e.target.value])
+  const toggleBrand = (e) => {
+    if (brand.includes(e.target.value)) {
+      setBrand((prev) => prev.filter((item) => item !== e.target.value));
+    } else {
+      setBrand((prev) => [...prev, e.target.value]);
     }
+  };
 
-  }
-  const applyFilter=()=>{
+  useEffect(() => {
     let productsCopy = products.slice();
 
-    if(showSearch && search){
-      productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+    if (showSearch && search) {
+      productsCopy = productsCopy.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
     }
 
-    if(category.length > 0){
-      productsCopy =productsCopy.filter(item => category.includes(item.category._id.toString()))
-    }
-    
-    if(brand.length > 0){
-      productsCopy =productsCopy.filter(item =>  brand.includes(item.brand._id.toString()))
+    if (category.length > 0) {
+      productsCopy = productsCopy.filter((item) =>
+        category.includes(item.category._id.toString())
+      );
     }
 
-    setFilterProducts(productsCopy);
+    if (brand.length > 0) {
+      productsCopy = productsCopy.filter((item) =>
+        brand.includes(item.brand._id.toString())
+      );
+    }
 
-  }
-
-   const sortProducts =()=>{
-     let filterProductsCopy =[...filterProducts];
-     switch(sortType){
-      case 'low-high':
-        setFilterProducts(filterProductsCopy.sort((a,b)=>(a.price - b.price)))
+    const sortedProducts = [...productsCopy];
+    switch (sortType) {
+      case "low-high":
+        sortedProducts.sort((a, b) => a.price - b.price);
         break;
-
-      case 'high-low':
-        setFilterProducts(filterProductsCopy.sort((a,b)=>(b.price - a.price)))
+      case "high-low":
+        sortedProducts.sort((a, b) => b.price - a.price);
         break;
-
-      case 'Top-Rated':
-        setFilterProducts(filterProductsCopy.sort((a,b)=>(b.avgRating -a.avgRating)))
-        break;  
+      case "Top-Rated":
+        sortedProducts.sort((a, b) => b.avgRating - a.avgRating);
+        break;
       default:
-        applyFilter();
-        break;    
-     }
-   }
+        break;
+    }
 
-  // useEffect(()=>{
-  //   setFilterProducts(products)
-  // },[products])
-
-  useEffect(()=>{
-    applyFilter(); 
-  },[category,brand,search,showSearch,products])
-  
-   useEffect(()=>{
-    sortProducts(); 
-  },[sortType])
+    setFilterProducts(sortedProducts);
+  }, [brand, category, products, search, showSearch, sortType]);
 
   return (
-    <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t'>
-     
-      {/* filter options */}
-      <div className='min-w-60'>
-        <p onClick={()=>setShowFilter(!showFilter)} className='my-2 text-xl flex items-center cursor-pointer gap-2'>
-      Select Items
-      <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' :''}`} src={assets.dropdown_icon} alt="" />
-        </p>
-       
-        {/*Category */}
-        <div className={`border border-gray-300 pl-5 py-3 my-5 ${showFilter ? '':'hidden'} sm:block `}>
-          <p className='mb-3 text-sm font-medium'>Category</p>
-          <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
-            {categories.map((category)=>(
-               <p key={category._id} className='flex gap-2'>
-              <input type='checkbox' className='w-3' onChange={toggleCategory} value={category._id}/>{category.name}
-            </p>
-            ))}
+    <Section className="pt-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <aside className="lg:w-64">
+          <button
+            type="button"
+            onClick={() => setShowFilter(!showFilter)}
+            className="flex w-full items-center justify-between rounded-lg border border-border bg-surface px-4 py-3 text-sm font-semibold text-foreground shadow-soft lg:hidden"
+          >
+            Filter products
+            <img
+              className={`h-3 transition-transform ${
+                showFilter ? "rotate-90" : ""
+              }`}
+              src={assets.dropdown_icon}
+              alt=""
+            />
+          </button>
+          <div
+            className={`mt-4 flex flex-col gap-4 ${
+              showFilter ? "block" : "hidden"
+            } lg:block`}
+          >
+            <Card className="p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-subtle">
+                Category
+              </p>
+              <div className="mt-4 flex flex-col gap-3 text-sm text-foreground">
+                {categories.map((item) => (
+                  <label key={item._id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                      onChange={toggleCategory}
+                      value={item._id}
+                    />
+                    {item.name}
+                  </label>
+                ))}
+              </div>
+            </Card>
+            <Card className="p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-subtle">
+                Brands
+              </p>
+              <div className="mt-4 flex flex-col gap-3 text-sm text-foreground">
+                {brands.map((item) => (
+                  <label key={item._id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                      value={item._id}
+                      onChange={toggleBrand}
+                    />
+                    {item.name}
+                  </label>
+                ))}
+              </div>
+            </Card>
+          </div>
+        </aside>
+        <div className="flex-1">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <Title text1={"All"} text2={"Collections"} />
+            <select
+              onChange={(e) => setSortType(e.target.value)}
+              className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-semibold text-foreground shadow-soft focus-ring"
+              value={sortType}
+            >
+              <option value="relevant">Sort: Relevant</option>
+              <option value="low-high">Sort: Low to high</option>
+              <option value="high-low">Sort: High to low</option>
+              <option value="Top-Rated">Sort: Top rated</option>
+            </select>
+          </div>
+          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {isLoading
+              ? Array.from({ length: 8 }).map((_, index) => (
+                  <ProductCardSkeleton key={`collection-skeleton-${index}`} />
+                ))
+              : filterProducts.map((item) => (
+                  <ProductItems
+                    key={item._id}
+                    name={item.name}
+                    id={item._id}
+                    price={item.price}
+                    image={item.image}
+                    ratings={item.avgRating}
+                  />
+                ))}
           </div>
         </div>
-         {/* brand*/}
-        <div className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '':'hidden'} sm:block `}>
-          <p className='mb-3 text-sm font-medium'>Brands</p>
-          <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
-            {brands.map((brand)=>(
-              <p key={brand._id} className='flex gap-2'>
-              <input type='checkbox' className='w-3' value={brand._id} onChange={toggleBrand}/>{brand.name}
-            </p>
-            ))
-            }
-          </div>
-        </div>
       </div>
-      {/* Right site */}
-      <div className='flex-1'>
-      <div className='flex justify-between text-base sm:text-2xl mb-14'>
-        <Title text1={'All'} text2={'Collections'}/>
-        {/* Products Sort */}
-        <select onChange={(e)=>setSortType(e.target.value)} className='border-2 border-gray-300 text-sm px-2'>
-          <option value='relevant'>Sort by:Relevant</option>
-          <option value='low-high'>Sort by: Low to HighPrice</option>
-          <option value='high-low'>Sort by: High to LowPrice</option>
-          <option value='Top-Rated'>Sort by: Top Rated</option>
-        </select>
-      </div>
-      {/* map products */}
-      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6 '>
-        {
-          filterProducts.map((item,id)=>(
-            <ProductItems key={id} name={item.name} id={item._id} price={item.price} image={item.image} ratings={item.avgRating}/>
-          ))
-        }
-
-      </div>
-      </div>
-
-    </div>
-  )
+    </Section>
+  );
 }
 
-export default Collection
+export default Collection;

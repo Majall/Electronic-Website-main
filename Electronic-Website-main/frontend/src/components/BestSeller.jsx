@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ShopContext } from "../context/ShopContext";
-import Title from "./Title";
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from "../context/ShopContextContext";
+import ProductCardSkeleton from "./ProductCardSkeleton";
 import ProductItems from "./ProductItems";
+import Section from "./ui/Section";
+import Title from "./Title";
 
 const BestSeller = () => {
-  const { products } = useContext(ShopContext);
+  const { products, isLoading } = useContext(ShopContext);
   const [bestSeller, setBestSeller] = useState([]);
 
   useEffect(() => {
@@ -13,32 +15,31 @@ const BestSeller = () => {
   }, [products]);
 
   return (
-    <div className="my-10">
-      <div className="text-center text-3xl py-8">
+    <Section className="pt-4">
+      <div className="text-center">
         <Title text1={"Best"} text2={"Sellers"} />
-        <p className="w-3/4 m-auto text-x5 sm:text-sm md:text-base text-gray-600">
-          Explore our top-performing products that customers love the most! From
-          cutting-edge gadgets to everyday tech essentials, these
-          <span className="font-semibold text-indigo-600"> best sellers</span>
-          combine performance, durability, and style. Handpicked by our
-          customers, they represent the best of{" "}
-          <span className="font-semibold text-indigo-600">GetItWare</span> —
-          where quality meets affordability.
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-subtle sm:text-base">
+          Explore the products customers return to — a curated set of favorites
+          designed for everyday performance.
         </p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-        {bestSeller.map((item, index) => (
-          <ProductItems
-            key={index}
-            id={item._id}
-            name={item.name}
-            price={item.price}
-            image={item.image}
-            ratings={item.avgRating}
-          />
-        ))}
+      <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {isLoading
+          ? Array.from({ length: 5 }).map((_, index) => (
+              <ProductCardSkeleton key={`best-skeleton-${index}`} />
+            ))
+          : bestSeller.map((item) => (
+              <ProductItems
+                key={item._id}
+                id={item._id}
+                name={item.name}
+                price={item.price}
+                image={item.image}
+                ratings={item.avgRating}
+              />
+            ))}
       </div>
-    </div>
+    </Section>
   );
 };
 
