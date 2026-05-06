@@ -47,7 +47,7 @@ const Product = () => {
     );
   }
 
-  if (!productData && isLoading) {
+  if (isLoading && !productData) {
     return (
       <Section className="pt-10">
         <div className="grid gap-10 lg:grid-cols-2">

@@ -5,8 +5,9 @@ const Modal = ({ isOpen, onClose, children, className }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
-      <button
-        aria-label="Close modal"
+      <div
+        role="presentation"
+        aria-hidden="true"
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
